@@ -28,10 +28,11 @@ struct Particle
 	vec3 x;
 	vec3 v;
 	vec3 f;
-	vec3 d(0,0,0);
+	float d;
 	float m;
 	vec3 color;
 	void Euler_Step(float h) {
+//		d = d + h;
 		v = v + (h/m)*f;
 		x = x + h*v;
 	}
@@ -53,7 +54,24 @@ struct Particle
 };
 
 vector<Particle> particle;
-
+vec3 Get_Particle_Color(float d){
+	vec3 yellow(1.0,1.0,0.0);
+	vec3 red(1.0,0.0,0.0);
+	vec3 grey(0.5,0.5,0.5);
+	if (d<0.1) {
+	  return yellow;
+	} else if (d <0.1){
+	
+	} else if (d < 1.5){
+	  return red;
+	} else if (d < 2.0) {
+	
+	} else if (d < 3){
+	  return 
+	} else {
+	  return grey;
+	}
+}
 float random(float k,float l){
 	float r = k + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(l-k)));
 
@@ -200,6 +218,7 @@ void application::draw_event()
 			p.f[1] = -9.8*p.m;
 			p.f[2] = 0;
 			p.Euler_Step(h);
+			p.Get_Particle_Color(p.d);
 			p.Handle_Collision(0.5,0.5);
 			
 		}
@@ -216,7 +235,10 @@ void application::draw_event()
         // glVertex3f(...) endpoint 2
         //
         //
+        //UPDATE D BEFORE DRAW
+    
     for(auto& p : particle){
+		glColor3f(p.color[0],p.color[1],p.color[2]);
 		vec3 t = p.x + p.v*0.04;
 		glVertex3f(p.x[0],p.x[1],p.x[2]);
 		glVertex3f(t[0],t[1],t[2]);
